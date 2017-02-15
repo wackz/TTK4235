@@ -8,7 +8,6 @@ void tmr_startTimer(float duration)
 	timerStarted = clock();  //syncs start time to system clock
 	dur = duration; //stores intended timer duration
 	printSystemMessage("tmr", "Timer module has been reset");
-	return -1;
 }
 
 
