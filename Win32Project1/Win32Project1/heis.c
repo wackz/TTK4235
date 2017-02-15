@@ -14,5 +14,9 @@ void mainElevatorLoop(void){
 		{
 			elev_set_motor_direction(DIRN_UP);
 		}
+		if (elev_get_stop_signal())
+		{
+			abort();
+		}
 	}
 }
