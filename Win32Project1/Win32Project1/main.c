@@ -1,16 +1,15 @@
-#include "timer.h"
-#include "systemReport.h"
+#include "elev.h"
+#include <stdio.h>
+#include "heis.h"
 
-int main(void)
-{
-	printSystemMessage("main", "MAIN STARTED SUCCESSFULLY");
-	while (true)
-	{
-		tmr_startTimer(3);
-		while (!tmr_getTimerDone())
-		{
 
-		}
-	}
-	getchar();
+int main() {
+    // Initialize hardware
+    if (!elev_init()) {
+		printSystemMessage("boot", "could not initialize driver");
+        return 1;
+    }
+
+	mainElevatorLoop();
+    return 0;
 }

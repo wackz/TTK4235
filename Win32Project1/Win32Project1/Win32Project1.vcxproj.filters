@@ -18,10 +18,22 @@
     <ClCompile Include="timer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
+    <ClCompile Include="systemReport.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="systemReport.c">
+    <ClCompile Include="requestHandler.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="heis.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="elev.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="io.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,6 +42,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systemReport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="requestHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="heis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="channels.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="elev.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

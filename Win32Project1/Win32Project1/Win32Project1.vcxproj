@@ -76,11 +76,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="elev.c" />
+    <ClCompile Include="heis.c" />
+    <ClCompile Include="io.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="requestHandler.c" />
     <ClCompile Include="systemReport.c" />
     <ClCompile Include="timer.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="channels.h" />
+    <ClInclude Include="elev.h" />
+    <ClInclude Include="heis.h" />
+    <ClInclude Include="io.h" />
+    <ClInclude Include="requestHandler.h" />
     <ClInclude Include="systemReport.h" />
     <ClInclude Include="timer.h" />
   </ItemGroup>
