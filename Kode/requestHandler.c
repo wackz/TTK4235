@@ -1,64 +1,61 @@
 #include "requestHandler.h"
-#include "elev.h"
-#include "systemReport.h"
-
 Etasje req_getPrioritizedRequest()
 {
-
-	// finn requesten med høyest prioritet (L->R)
-	int i;
-	for(i = 0 ; i < 10; i++)
-	{
-		if(requestList[i] == true)
-		{
-			break;
-		}
-	}
-	
-	
-	//match request med riktig etasje og returner
-	if(i == 10){
-		return NONE;
-	}
-	Request currentRequest = (Request)i;
-	requestList[i] = false;
-	
-	if(currentRequest == HEIS_1 || currentRequest == OPP_1){
-		printSystemMessage("req", "request for ETG1 handed to heis.c");
-		return ETG1;
-	}
-	else if(currentRequest == HEIS_2 || currentRequest == OPP_2 || currentRequest == NED_2){
-		printSystemMessage("req", "request for ETG2 handed to heis.c");
-		return ETG2;
-	}
-	else if(currentRequest == HEIS_3 || currentRequest == OPP_3 || currentRequest == NED_3){
-		printSystemMessage("req", "request for ETG3 handed to heis.c");
-		return ETG3;
-	}
-	else 
-	{
-		printSystemMessage("req", "request for ETG4 handed to heis.c");
-		return ETG4;
-	}
+	if(elevatorState.direction){
+		if(CheckAbove(elevatorState.currentFloor) == NONE)
+			return CheckBelow(elevatorState.currentFloor);
+		else return CheckAbove(elevatorState.currentFloor);
+	}	
+	else{
+		if(CheckBelow(elevatorState.currentFloor) == NONE)
+			return CheckAbove(elevatorState.currentFloor);
+		else return CheckBelow(elevatorState.currentFloor);
+	}	
 }
-
-
 
 void req_updateRequestList()
 {
 	
 	//oppdater requests ved å sjekke alle knappene og oppdatere requestList deretter
-	int i;
-	for(i = 0; i < 4; i++)
+	for(int i = 0; i <= 3; i++)
 	{
-		requestList[i] = elev_get_button_signal(BUTTON_COMMAND, int i);
+		if(!queue_matrix[i][0]) //passer på at knappen lyser etter at den har blitt aktivert
+			queue_matrix[i][0] = elev_get_button_signal(BUTTON_COMMAND,i);
+		//queue_matrix[i][1] = elev_get_button_signal(BUTTON_CALL_DOWN,i);
+		//queue_matrix[i][2] = elev_get_button_signal(BUTTON_CALL_UP,i);	
+		
 	}
-	for(i = 4; i < 7; i++)
-	{
-		requestList[i] = elev_get_button_signal(BUTTON_CALL_DOWN, int i);
+	
+	//aktiverer lys - må flyttes til heis.c
+	for(int i = 0; i < 4; i++){
+		elev_set_button_lamp(BUTTON_COMMAND,i,queue_matrix[i][0]);
 	}
-	for(i = 7; i < 10; i++)
-	{
-		requestList[i] = elev_get_button_signal(BUTTON_CALL_UP, int i);
-	}
+
+
 }
+
+void req_init(ElevatorState* elev){
+	elevatorState = elev;
+}
+
+void req_wipeRequests(){
+	for(int i = 0; i < 4; i++)
+		for(int j = 0; j < 3; j++)
+			queue_matrix[i][j] = 0;
+
+Etasje CheckAbove(Etasje currentFloor){
+	for(int i = currentFloor - 1; i < N_FLOORS; i++){
+		if(i) return (Etasje)(i);
+	}
+	return NONE;
+}
+
+Etasje CheckBelow(Etasje currentFloor){
+	for(int i = currentFloor - 1; i >= 0; i--){
+		if(i) return (Etasje)(i);
+	}
+	return NONE;
+}
+
+
+
