@@ -5,8 +5,11 @@
 void req_init(void){
 	elevatorState = (ElevatorState){ETG1, NONE, 1, 1, 1, 0, 0, 1}; //heisens overordnede tilstand
 }
+
 Etasje req_getPrioritizedRequest()
 {
+	req_refreshMatrix();
+	req_updateRequestList();
 	if(elevatorState.direction){
 		if(CheckAbove(elevatorState.currentFloor) == NONE)
 			return CheckBelow(elevatorState.currentFloor);
@@ -47,7 +50,7 @@ void req_wipeRequests(void){
 }
 Etasje CheckAbove(Etasje currentFloor){
 	for(int i = currentFloor - 1; i < N_FLOORS; i++){
-		if(i) return (Etasje)(i);
+		if(queue_matrix[i][0])return (Etasje)(i);
 	}
 	return NONE;
 }
@@ -58,6 +61,16 @@ Etasje CheckBelow(Etasje currentFloor){
 	}
 	return NONE;
 }
+
+void req_refreshMatrix(){
+
+	queue_matrix[elevatorState.currentFloor][0] = 0;
+	for(int i = 0; i < 4; i++){
+		elev_set_button_lamp(BUTTON_COMMAND,i,queue_matrix[i][0]);
+	}
+
+}
+
 
 
 
