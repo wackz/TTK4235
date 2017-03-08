@@ -94,10 +94,20 @@ static void updateElevatorOutput(void){
 	
 	
 	
+	//handle arriving at target floor 
+	else if(elevatorState.currentFloor == elevatorState.targetFloor){
+		tmr_startTimer(3);
+		elevatorState.doorOpen = 1;
+		elev_set_motor_direction(DIRN_STOP); 
+	}
+	
+	
+	
 	//handle open door
 	else if(elevatorState.doorOpen && !elevatorState.idle){
 		elev_set_door_open_lamp(1);
 	} 
+	
 	
 	
 	//handle NONE request
@@ -106,6 +116,7 @@ static void updateElevatorOutput(void){
 		elev_set_door_open_lamp(1);
 		elev_set_motor_direction(DIRN_STOP);
 	}
+	
 	
 	
 	//handle other request
