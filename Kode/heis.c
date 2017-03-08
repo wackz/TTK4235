@@ -4,12 +4,14 @@
 void mainElevatorLoop(void){
 	//initialisering skjer her!
 	elev_set_motor_direction(DIRN_DOWN);
+	req_init();	
 	while(elev_get_floor_sensor_signal() != 0)
 	{
 		//busy wait
 	}
 	elev_set_motor_direction(DIRN_STOP);
-	elevatorState.doorOpen == true;
+	elevatorState.doorOpen = true;
+	
 
 	
 	//hovedprogramloop
@@ -19,7 +21,6 @@ void mainElevatorLoop(void){
 		updateEmergencyStates();
 		updateCurrentFloor();
 		updateTargetFloor();
-		updateTimerInProgress();
 		
 		//update elevator output
 		updateElevatorOutput();
@@ -39,7 +40,7 @@ static void updateEmergencyStates(void){
 
 static void updateCurrentFloor(void){
 		if(elev_get_floor_sensor_signal() != -1){
-			elevatorState.currentFloor = elev_get_floor_sensor_signal()
+			elevatorState.currentFloor = elev_get_floor_sensor_signal();
 			elevatorState.isAtFloor = true;
 		}
 		else{
@@ -50,10 +51,10 @@ static void updateCurrentFloor(void){
 static void updateTargetFloor(void){
 			elevatorState.targetFloor = req_getPrioritizedRequest();
 			if(elevatorState.targetFloor == NONE){
-				elevatorState.idle == true;
+				elevatorState.idle = true;
 			}
 			else{
-				elevatorState.idle == false;
+				elevatorState.idle = false;
 			}
 }
 
@@ -75,7 +76,7 @@ static void updateElevatorOutput(void){
 	if(elevatorState.emergencyButton){
 		elev_set_motor_direction(DIRN_STOP); 
 		//åpne døra hvis heisen er ved en etasje
-		if(isAtFloor == true){
+		if(elevatorState.isAtFloor == true){
 			elevatorState.doorOpen = 1;
 		}
 		req_wipeRequests();
@@ -85,7 +86,7 @@ static void updateElevatorOutput(void){
 	
 	
 	//handle obstruction
-	else if(elevatorState.obstruction && isAtFloor){
+	else if(elevatorState.obstruction && elevatorState.isAtFloor){
 		tmr_startTimer(3);
 		elevatorState.doorOpen = 1;
 		elev_set_motor_direction(DIRN_STOP); 

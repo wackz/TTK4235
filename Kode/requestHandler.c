@@ -1,4 +1,10 @@
 #include "requestHandler.h"
+
+
+
+void req_init(void){
+	elevatorState = (ElevatorState){ETG1, NONE, 1, 1, 1, 0, 0, 1}; //heisens overordnede tilstand
+}
 Etasje req_getPrioritizedRequest()
 {
 	if(elevatorState.direction){
@@ -13,7 +19,7 @@ Etasje req_getPrioritizedRequest()
 	}	
 }
 
-void req_updateRequestList()
+void req_updateRequestList(void)
 {
 	
 	//oppdater requests ved å sjekke alle knappene og oppdatere requestList deretter
@@ -34,15 +40,11 @@ void req_updateRequestList()
 
 }
 
-void req_init(ElevatorState* elev){
-	elevatorState = elev;
-}
-
-void req_wipeRequests(){
+void req_wipeRequests(void){
 	for(int i = 0; i < 4; i++)
 		for(int j = 0; j < 3; j++)
 			queue_matrix[i][j] = 0;
-
+}
 Etasje CheckAbove(Etasje currentFloor){
 	for(int i = currentFloor - 1; i < N_FLOORS; i++){
 		if(i) return (Etasje)(i);

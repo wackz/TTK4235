@@ -1,3 +1,6 @@
+#ifndef REQHANDLER_H_
+#define REQHANDLER_H_
+
 #include <stdbool.h>
 #include "elev.h"
 #include "systemReport.h"
@@ -13,10 +16,9 @@ Etasje req_getPrioritizedRequest();//returnerer neste etasje heisen skal til
 
 void req_updateRequestList(); //henter hvilke heisknapper som er trykket og oppdaterer requestList (kjøres hver programsyklus)
 void req_wipeRequests(void);
-static Etasje CheckAbove(Etasje);
-static etasje CheckBelow(Etasje);
+Etasje CheckAbove(Etasje);
+Etasje CheckBelow(Etasje);
 
-static ElevatorState* elevatorState;
 static int queue_matrix[N_FLOORS][N_BUTTONS] = {
     {0, 0, 0},
     {0, 0, 0},
@@ -24,11 +26,20 @@ static int queue_matrix[N_FLOORS][N_BUTTONS] = {
     {0, 0, 0},
 };
 
+// struct som definerer heisens nåværende situasjon
 typedef struct{
 	Etasje currentFloor;
 	Etasje targetFloor;
+	bool isAtFloor;
 	bool direction; // 1 for opp - 0 for ned
 	bool doorOpen; // 1 for åpen - 0 for lukket
 	bool emergencyButton; //1 for trykket - 0 ellers
 	bool obstruction; //1 for obstruksjon på - 0 ellers
+	bool idle;
 } ElevatorState;
+
+ElevatorState elevatorState;
+
+void req_init(void);
+
+#endif
