@@ -18,13 +18,9 @@ void mainElevatorLoop(void){
 	while (true)
 	{
 		//update all elevatorStates
-		updateEmergencyStates();
-		updateCurrentFloor();
-		updateTargetFloor();
-		
-		//update elevator output
-		updateElevatorOutput();
-
+		updateStopButton(void);
+		updateOrderButtons(void);
+		updateTimer(void);
 	}
 }
 
@@ -33,30 +29,16 @@ void mainElevatorLoop(void){
 //update functions for state of elevator
 //---------------------------------------------------
 
-static void updateEmergencyStates(void){
-		elevatorState.obstruction = (bool)elev_get_obstruction_signal();
-		elevatorState.emergencyButton = (bool)elev_get_stop_signal();
+static void updateStopButton(void){
+	
 }
 
-static void updateCurrentFloor(void){
-		if(elev_get_floor_sensor_signal() != -1){
-			elevatorState.currentFloor = elev_get_floor_sensor_signal();
-			elevatorState.isAtFloor = true;
-		}
-		else{
-			elevatorState.isAtFloor = false;
-		}
+static void updateOrderButtons(void){
+
 }
 
-static void updateTargetFloor(void){
-			elevatorState.targetFloor = req_getPrioritizedRequest();
-			printf("%d target floor",elevatorState.targetFloor);
-			if(elevatorState.targetFloor == NONE){
-				elevatorState.idle = true;
-			}
-			else{
-				elevatorState.idle = false;
-			}
+static void updateTimer(void){
+
 }
 
 //---------------------------------------------------
@@ -65,6 +47,9 @@ static void updateTargetFloor(void){
 
 static void updateElevatorOutput(void){
 	
+	 
+	 
+	 /*
 	//close door if timer is done
 	if(tmr_getTimerDone()){
 		elevatorState.doorOpen = false;
@@ -79,7 +64,7 @@ static void updateElevatorOutput(void){
 		elev_set_motor_direction(DIRN_STOP); 
 		//åpne døra hvis heisen er ved en etasje
 		if(elevatorState.isAtFloor == true){
-			elevatorState.doorOpen = 1;
+			elevatorState.doorOpen = true;
 		}
 		req_wipeRequests();
 		elevatorState.targetFloor = NONE;
@@ -91,7 +76,7 @@ static void updateElevatorOutput(void){
 	else if(elevatorState.obstruction && elevatorState.isAtFloor){
 		printSystemMessage("heis", "door obstructed");
 		tmr_startTimer(3);
-		elevatorState.doorOpen = 1;
+		elevatorState.doorOpen = true;
 		elev_set_motor_direction(DIRN_STOP); 
 	}
 	
@@ -101,7 +86,7 @@ static void updateElevatorOutput(void){
 	else if(elevatorState.currentFloor == elevatorState.targetFloor && elevatorState.isAtFloor == true){
 		printSystemMessage("heis", "elevator reached target floor");
 		tmr_startTimer(3);
-		elevatorState.doorOpen = 1;
+		elevatorState.doorOpen = true;
 		elev_set_motor_direction(DIRN_STOP); 
 	}
 	
@@ -118,7 +103,7 @@ static void updateElevatorOutput(void){
 	//handle NONE request
 	else if(elevatorState.idle){
 		printSystemMessage("heis", "elevator idle - waiting for new request");
-		elevatorState.doorOpen = 1;
+		elevatorState.doorOpen = true;
 		elev_set_door_open_lamp(1);
 		elev_set_motor_direction(DIRN_STOP);
 	}
@@ -127,7 +112,7 @@ static void updateElevatorOutput(void){
 	
 	//handle other request
 	else if(!elevatorState.idle){
-		elevatorState.doorOpen = 0;
+		elevatorState.doorOpen = false;
 		elev_set_door_open_lamp(0);
 		if(elevatorState.targetFloor > elevatorState.currentFloor){
 			elev_set_motor_direction(DIRN_UP);
@@ -138,4 +123,5 @@ static void updateElevatorOutput(void){
 			printSystemMessage("heis", "elevator active - moving down");
 		}
 	}
+	*/
 }
