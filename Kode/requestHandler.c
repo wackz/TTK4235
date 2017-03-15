@@ -30,8 +30,10 @@ void req_updateRequestList(void)
 	{
 		if(!queue_matrix[i][0]) //passer på at knappen lyser etter at den har blitt aktivert
 			queue_matrix[i][0] = elev_get_button_signal(BUTTON_COMMAND,i);
-		//queue_matrix[i][1] = elev_get_button_signal(BUTTON_CALL_DOWN,i);
-		//queue_matrix[i][2] = elev_get_button_signal(BUTTON_CALL_UP,i);	
+		if(!queue_matrix[i][1] && i!=0) //passer på at knappen lyser etter at den har blitt aktivert
+			queue_matrix[i][1] = elev_get_button_signal(BUTTON_CALL_DOWN,i);
+		if(!queue_matrix[i][2] && i!=3) //passer på at knappen lyser etter at den har blitt aktivert
+			queue_matrix[i][2] = elev_get_button_signal(BUTTON_CALL_UP,i);	
 		
 	}
 	
