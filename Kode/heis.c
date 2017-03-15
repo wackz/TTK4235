@@ -3,8 +3,7 @@
 
 void mainElevatorLoop(void){
 	//initialisering skjer her!
-	elev_set_motor_direction(DIRN_DOWN);
-	req_init();	
+	elev_set_motor_direction(DIRN_DOWN);	
 	while(elev_get_floor_sensor_signal() != 0)
 	{
 		//busy wait
@@ -30,7 +29,17 @@ void mainElevatorLoop(void){
 //---------------------------------------------------
 
 static void updateStopButton(void){
+	static previousButtonState = false;
 	
+	if(previousButtonState && drv_getStopButton){
+		//pressed stop button
+		fsm_stopButtonPressed();
+		previousButtonState = false;
+	}
+	if(!previousButtonState && !drv_getStopButton){
+		//released stop button
+		fsm_stopButtonReleased();
+	}
 }
 
 static void updateOrderButtons(void){
@@ -45,7 +54,7 @@ static void updateTimer(void){
 //update function for elevator output
 //---------------------------------------------------
 
-static void updateElevatorOutput(void){
+//static void updateElevatorOutput(void){
 	
 	 
 	 
@@ -124,4 +133,4 @@ static void updateElevatorOutput(void){
 		}
 	}
 	*/
-}
+//}
