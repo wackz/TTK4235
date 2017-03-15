@@ -50,18 +50,25 @@ void req_wipeRequests(void){
 }
 Etasje CheckAbove(Etasje currentFloor){
 	for(int i = currentFloor - 1; i < N_FLOORS; i++){
-		if(queue_matrix[i][0])return (Etasje)(i);
+		if(CheckFloorRequests(i))return (Etasje)(i);
 	}
 	return NONE;
 }
 
 Etasje CheckBelow(Etasje currentFloor){
 	for(int i = currentFloor - 1; i >= 0; i--){
-		if(i) return (Etasje)(i);
+		if(CheckFloorRequests(i)) return (Etasje)(i);
 	}
 	return NONE;
 }
 
+bool CheckFloorRequests(int floor){
+	for(int i = 0; i<3; i++){
+		if(queue_matrix[floor][i])
+			return true;
+	}
+	return false;
+}
 void req_refreshMatrix(){
 
 	queue_matrix[elevatorState.currentFloor][0] = 0;

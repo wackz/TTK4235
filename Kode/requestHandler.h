@@ -42,5 +42,6 @@ ElevatorState elevatorState;
 
 void req_init(void);
 void req_refreshMatrix(void);
+bool CheckFloorRequests(int);
 
 #endif
