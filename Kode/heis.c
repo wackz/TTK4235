@@ -50,6 +50,7 @@ static void updateCurrentFloor(void){
 
 static void updateTargetFloor(void){
 			elevatorState.targetFloor = req_getPrioritizedRequest();
+			printf("%d target floor",elevatorState.targetFloor);
 			if(elevatorState.targetFloor == NONE){
 				elevatorState.idle = true;
 			}
