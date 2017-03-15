@@ -14,10 +14,9 @@ void tmr_startTimer(float duration)
 bool tmr_getTimerDone(void)
 {
 	float deltaTime = (float)(clock() - timerStarted) / CLOCKS_PER_SEC; //get time difference
-	if (deltaTime >= dur && timerHasBeenRead == false)
+	if (deltaTime >= dur)
 	{
 		printSystemMessage("tmr", "Timer module is done");
-		timerHasBeenRead = true;
 		return true;
 	}
 	return false;

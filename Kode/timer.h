@@ -8,6 +8,5 @@ bool tmr_getTimerDone(void); //returns true if the timer is done and HAS NOT BEE
 
 static clock_t timerStarted; 
 static float dur; //permanent storage of parameter "duration"
-static bool timerHasBeenRead = false;
 
 
