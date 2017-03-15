@@ -5,6 +5,10 @@
 #include "requestHandler.h"
 #include "elev.h"
 
+typedef struct{
+	elev_motor_direction_t motorDirection;
+	
+} ElevatorOutput;
 
 void mainElevatorLoop(void);
 

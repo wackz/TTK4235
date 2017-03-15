@@ -68,7 +68,7 @@ static void updateElevatorOutput(void){
 	//close door if timer is done
 	if(tmr_getTimerDone()){
 		elevatorState.doorOpen = false;
-		elev_set_door_open_lamp(0);
+		tmr_stopTimer();
 	}
 	
 	
@@ -98,7 +98,7 @@ static void updateElevatorOutput(void){
 	
 	
 	//handle arriving at target floor 
-	else if(elevatorState.currentFloor == elevatorState.targetFloor){
+	else if(elevatorState.currentFloor == elevatorState.targetFloor && elevatorState.isAtFloor == true){
 		printSystemMessage("heis", "elevator reached target floor");
 		tmr_startTimer(3);
 		elevatorState.doorOpen = 1;

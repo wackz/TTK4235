@@ -4,7 +4,7 @@
 
 void tmr_startTimer(float duration)
 {
-	timerHasBeenRead = false;
+	timerEnabled = true;
 	timerStarted = clock();  //syncs start time to system clock
 	dur = duration; //stores intended timer duration
 	printSystemMessage("tmr", "Timer module has been reset");
@@ -14,10 +14,14 @@ void tmr_startTimer(float duration)
 bool tmr_getTimerDone(void)
 {
 	float deltaTime = (float)(clock() - timerStarted) / CLOCKS_PER_SEC; //get time difference
-	if (deltaTime >= dur)
+	if (deltaTime >= dur && timerEnabled)
 	{
 		printSystemMessage("tmr", "Timer module is done");
 		return true;
 	}
 	return false;
+}
+
+void tmr_stopTimer(void){
+	timerEnabled = false;
 }
