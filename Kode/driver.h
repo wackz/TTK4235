@@ -16,7 +16,6 @@ static bool floorMatrix[4][3] = {
 void drv_setFloorMatrix(int floor, tag_elev_lamp_type buttonType, bool value);
 void drv_wipeFloorMatrix(void);
 bool drv_passingFloorWithRequest(int floor);
-//int drv_getTargetFloor(void);
 bool drv_isAtTargetFloor(void);
 
 
@@ -31,7 +30,6 @@ void drv_updateFloorLampsFromMatrix(void);
 //get functions
 bool drv_getIsAtFloor(void);
 bool drv_getStopButton(void);
-bool drv_getObstruction(void);
 elev_motor_direction_t drv_getDirection(void);
 int drv_getTargetFloor(void);
 int drv_getCurrentFloor(void);

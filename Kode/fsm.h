@@ -11,10 +11,12 @@ typedef enum{
 	OPEN_DOORS,
 }ElevatorState
 
+//holds current elevator state 
 ElevatorState elevatorState = INIT;
 
+//functions responding to any possible button press
+void fsm_init(void);
 void fsm_entersFloor(int floor);
-void fsm_exitsFloor(int floor);
 void fsm_stopButtonPressed(void);
 void fsm_stopButtonReleased(void);
 void fsm_requestButtonPressed(int floor, int buttonType);

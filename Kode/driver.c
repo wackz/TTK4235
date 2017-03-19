@@ -54,6 +54,7 @@ bool drv_isAtTargetFloor(void)
 void drv_setMotorDirection(elev_motor_direction_t direction)
 {
 	elev_set_motor_direction(direction);
+	motorDirection = direction;
 }
 
 void drv_doorLamp(bool doorOpen)
@@ -108,11 +109,6 @@ bool drv_getStopButton(void)
 	return false
 }
 
-bool drv_getObstruction(void)
-{
-	return (bool)elev_get_obstruction_signal(void);
-}
-
 elev_motor_direction_t drv_getDirecction(void)
 {
 	return motorDirection;
@@ -125,39 +121,5 @@ elev_motor_direction_t drv_getDirecction(void)
 //------------------------
 elev_motor_direction_t drv_dirToTargetFloor(void)
 {
-	//check down-buttons
-	for(int i = 3; i == 0; i--)
-	{
-		if(floorMatrix[i][BUTTON_CALL_DOWN] == 1)
-		{
-			return i;
-		}
-	}
-	//check up-buttons
-	for(int i = 0; i < 3; i++)
-	{
-		if(floorMatrix[i][BUTTON_CALL_UP] == 1)
-		{
-			return i;
-		}
-	}
-	//checks command buttons
-	for(int i = 0; i < 4; i++)
-	{
-		if(floorMatrix[i][BUTTON_COMMAND] == 1)
-		{
-			targetFloor = i
-		}
-	}
-
-	//sets direction
-	if(targetFloor > currentFloor)
-	{
-		return DIRN_UP;
-	}
-	else if(targetFloor < currentFloor)
-	{
-		return DIRN_DOWN;
-	}
-	return DIRN_STOP;
+	//prioritetskode!!!
 }

@@ -1,15 +1,37 @@
+void fsm_init(void)
+{
+	printSystemMessage("fsm-init", "initializing", -1);
+	elevatorState = INIT;
+	drv_setMotorDirection(DIRN_DOWN);
+	while(drv_getCurrentFloor() != 0){}
+	drv_setMotorDirection(DIRN_STOP);
+	elevatorState = IDLE;
+	printSystemMessage("fsm-init", "initializing - DONE", -1);
+}
+
 
 void fsm_stopButtonPressed(void)
 {
 	if (drv_isAtFloor())
 	{
-		drv_setDoors(true);
+		drv_setDoorLamp(true);
 	}
 	drv_setMotorDirection(DIRN_STOP);
 	elevatorState = EMERGENCY;
 	drv_wipeFloorMatrix(void);
 	drv_updateFloorLampsFromMatrix(void);
+	drv_setStopLamp(true);
 	printSystemMessage("fsm", "EMERGENCY STOP - matrix reset", -1);
+}
+
+
+
+void fsm_stopButtonReleased(void)
+{
+	drv_setMotorDirection(DIRN_STOP);
+	elevatorState = IDLE;
+	drv_setStopLamp(false);
+	printSystemMessage("fsm", "EMERGENCY RELEASED - returning to idle", -1);
 }
 
 
@@ -18,20 +40,13 @@ void fsm_timerDone(void)
 {
 	switch(elevatorState){
 		case EMERGENCY:
-			elevatorState = IDLE;
 			printSystemMessage("fsm", "timer complete after EMERGENCY", -1);
 			break;
 		case OPEN_DOORS:
-			if(!drv_getObstruction())
-			{
-				elevatorState = MOVING;
-				drv_setDoors(false);
-				drv_setMotorDirection(drv_dirToTargetFloor());
-				printSystemMessage("fsm", "timer complete after doors have been open", -1);
-				break;
-			}
-			tmr_startTimer();
-			printSystemMessage("fsm", "door obstructed", -1);
+			elevatorState = MOVING;
+			drv_setDoors(false);
+			drv_setMotorDirection(drv_dirToTargetFloor());
+			printSystemMessage("fsm", "timer complete after doors have been open", -1);
 			break;
 		case IDLE: 
 			elevatorState = MOVING;
@@ -41,6 +56,7 @@ void fsm_timerDone(void)
 			break;
 	}
 }
+
 
 
 
@@ -78,18 +94,19 @@ void fsm_entersFloor(int floor){
 
 
 
+
 void fsm_requestButtonPressed(int floor, int buttonType)
 {
+	if(elevatorState == EMERGENCY)
+	{
+		printSystemMessage("fsm", "EMERGENCY - request at floor denied", floor);
+		return;
+	}
 	printSystemMessage("fsm", "request acquired at floor:", floor);
 	drv_setFloorMatrix(floor, buttonType, true);
 	drv_updateFloorLampsFromMatrix(void);
 	
 	switch(elevatorState){
-		case EMERGENCY:
-			elevatorState = MOVING;
-			drv_setDoors(false);
-			drv_setMotorDirection(drv_dirToTargetFloor());
-			break;
 		case IDLE: 
 			elevatorState = MOVING;
 			drv_setDoors(false);
