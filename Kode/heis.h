@@ -6,6 +6,7 @@
 void mainElevatorLoop(void);
 
 //update functions 
+static void updateFloorSignals(void);
 static void updateStopButton(void);
 static void updateOrderButtons(void);
 static void updateTimer(void);

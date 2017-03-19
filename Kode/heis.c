@@ -16,10 +16,13 @@ void mainElevatorLoop(void){
 	while (true)
 	{
 		//update all elevatorStates
+		updateFloorSignals();
 		updateStopButton();
 		updateOrderButtons();
 		updateTimer();
 	}
+	
+	return 0;
 }
 
 
@@ -42,12 +45,33 @@ static void updateStopButton(void){
 }
 
 static void updateOrderButtons(void){
-
+	static int buttonStates[N_BUTTONS][N_FLOORS] = {{0}};
+	
+	for (int i = 0; i < N_BUTTONS; i++)
+    {
+        for (int j = 0; j < N_FLOORS; j++)
+        {
+			//needs exception handling for floor 1 and floor 4
+			//elev api calls needs to be moved to driver
+			//need to change fsm_OrderBtnClicked to fsm_requestButtonPressed
+			if (buttonStates[i][j]==0 && elev_get_button_signal(i,j))
+            {
+                buttonStates[i][j]=true;
+                fsm_OrderBtnClicked(i,j);
+            }
+            else if (buttonStates[i][j]==1 && !elev_get_button_signal(i,j))
+                buttonStates[i][j]=false;
+			
 }
 
 static void updateTimer(void){
 
 }
+
+static void updateFloorSignals(void){
+
+}
+
 
 //---------------------------------------------------
 //update function for elevator output
