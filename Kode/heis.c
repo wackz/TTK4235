@@ -9,7 +9,6 @@ void mainElevatorLoop(void){
 		//busy wait
 	}
 	elev_set_motor_direction(DIRN_STOP);
-	elevatorState.doorOpen = true;
 	
 
 	
@@ -17,9 +16,9 @@ void mainElevatorLoop(void){
 	while (true)
 	{
 		//update all elevatorStates
-		updateStopButton(void);
-		updateOrderButtons(void);
-		updateTimer(void);
+		updateStopButton();
+		updateOrderButtons();
+		updateTimer();
 	}
 }
 
@@ -31,12 +30,12 @@ void mainElevatorLoop(void){
 static void updateStopButton(void){
 	static previousButtonState = false;
 	
-	if(previousButtonState && drv_getStopButton){
+	if(previousButtonState && drv_getStopButton()){
 		//pressed stop button
 		fsm_stopButtonPressed();
 		previousButtonState = false;
 	}
-	if(!previousButtonState && !drv_getStopButton){
+	if(!previousButtonState && !drv_getStopButton()){
 		//released stop button
 		fsm_stopButtonReleased();
 	}
