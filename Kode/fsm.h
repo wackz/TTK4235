@@ -14,6 +14,8 @@ typedef enum{
 ElevatorState elevatorState = INIT;
 
 void fsm_entersFloor(int floor);
+void fsm_exitsFloor(int floor);
 void fsm_stopButtonPressed(void);
+void fsm_stopButtonReleased(void);
 void fsm_requestButtonPressed(int floor, int buttonType);
 void fsm_timerDone(void);
