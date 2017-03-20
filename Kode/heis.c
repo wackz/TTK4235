@@ -3,13 +3,15 @@
 
 void mainElevatorLoop(void){
 	//initialisering skjer her!
-	elev_set_motor_direction(DIRN_DOWN);	
+	/*elev_set_motor_direction(DIRN_DOWN);	
 	while(elev_get_floor_sensor_signal() != 0)
 	{
 		//busy wait
 	}
 	elev_set_motor_direction(DIRN_STOP);
+	*/
 	
+	fsm_init()
 
 	
 	//hovedprogramloop
