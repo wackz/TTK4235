@@ -23,8 +23,6 @@ void mainElevatorLoop(void){
 		updateOrderButtons();
 		updateTimer();
 	}
-	
-	return 0;
 }
 
 
