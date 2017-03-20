@@ -33,14 +33,14 @@ void mainElevatorLoop(void){
 static void updateStopButton(void){
 	static previousButtonState = false;
 	
-	if(previousButtonState && drv_getStopButton()){
+	if(!previousButtonState && drv_getStopButton()){
 		//pressed stop button
 		fsm_stopButtonPressed();
-		previousButtonState = false;
+		previousButtonState = true;
 	}
-	if(!previousButtonState && !drv_getStopButton()){
+	if(previousButtonState && !drv_getStopButton()){
 		//released stop button
-		fsm_stopButtonReleased();
+		previousButtonState = false;
 	}
 }
 
@@ -72,7 +72,7 @@ static void updateFloorSignals(void){
 	static previousFloorStates = {0,0,0,0};
 	
 	for(int i = 0; i < N_FLOORS; i++){
-		if(previousFloorState && drv_getFloor){
+		if(previousFloorState[i] && drv_getFloor()){
 		//pressed stop button
 		fsm_entersFloor();
 		previousButtonState[i] = false;
