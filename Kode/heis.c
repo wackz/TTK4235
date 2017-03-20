@@ -69,7 +69,16 @@ static void updateTimer(void){
 }
 
 static void updateFloorSignals(void){
-
+	static previousFloorStates = {0,0,0,0};
+	
+	for(int i = 0; i < N_FLOORS; i++){
+		if(previousFloorState && drv_getFloor){
+		//pressed stop button
+		fsm_entersFloor();
+		previousButtonState[i] = false;
+		}
+	}
+	
 }
 
 
