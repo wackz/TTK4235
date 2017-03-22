@@ -3,6 +3,7 @@
 #include "heis.h"
 #include "fsm.h"
 #include "timer.h"
+#include <stdbool.h>
 
 #define N_FLOORS 4
 #define N_BUTTONS 3
@@ -58,6 +59,9 @@ static void updateOrderButtons(){
 			//needs exception handling for floor 1 and floor 4
 			//elev api calls needs to be moved to driver
 			//need to change fsm_OrderBtnClicked to fsm_requestButtonPressed
+			if(j==3 && i==0) continue;
+			if(j==0&& i==1) continue;
+
 			if (buttonStates[i][j]==0 && elev_get_button_signal(i,j))
             {
                 buttonStates[i][j]=true;
@@ -75,22 +79,24 @@ static void updateTimer(){
 }
 
 static void updateFloorSignals(){
-	static int previousFloorState[N_FLOORS] = {0};
+	static int floorState[N_FLOORS] = {0,0,0,0};
 	
-	
+	for(int i = 0; i < N_FLOORS; i++){
+		if(floorState[i]==0 && drv_getCurrentFloor()==i){
+			fsm_entersFloor(i);
+			floorState[i] = true;
+		}
+	}
 
 	for(int i = 0; i < N_FLOORS; i++){
-		if(!previousFloorState[i] && drv_getCurrentFloor()){
-			previousFloorState[i] = true;
+		if(floorState[i]==1 && drv_getCurrentFloor()!=i){
+			
+			floorState[i] = false;
 		}
 	}
+
 	
-	for(int i = 0; i < N_FLOORS; i++){
-		if(previousFloorState[i] && drv_getCurrentFloor()==i){
-			fsm_entersFloor(i);
-			previousFloorState[i] = false;
-		}
-	}
+	
 	
 }
 

@@ -2,6 +2,7 @@
 #include "driver.h"
 #include "systemReport.h"
 #include "fsm.h"
+#include <stdbool.h>
 
 #define TIMER_SEC 3
 
@@ -118,10 +119,16 @@ void fsm_requestButtonPressed(int floor, int buttonType)
 	
 	switch(elevatorState){
 		case IDLE: 
-			elevatorState = MOVING;
-			drv_setDoorLamp(false);
-			drv_setMotorDirection(drv_dirToTargetFloor());
-			break;
+			if(floor==drv_getCurrentFloor()){
+				printSystemMessage("fsm","Already at floor with request. Opening door",-1);
+				//HUSK Å SLETTE REQUEST HER. DET HAR IKKE JEG GJORT
+			}
+			else {
+				elevatorState = MOVING;
+				drv_setDoorLamp(false);
+				drv_setMotorDirection(drv_dirToTargetFloor());
+			}
+			break; 
 		default: break;
 	}
 }
