@@ -66,7 +66,7 @@ void drv_setMotorDirection(int direction)
 	motorDirection = direction;
 }
 
-void drv_doorLamp(int value)
+void drv_setDoorLamp(int value)
 {
 	elev_set_door_open_lamp(value);
 }
@@ -99,7 +99,7 @@ void drv_updateFloorLampsFromMatrix(void)
 //get functions
 //------------------------
 
-int drv_GetIsAtFloor(void)
+int drv_getIsAtFloor(void)
 {
 	int floor = elev_get_floor_sensor_signal();
 	if(floor != -1)
@@ -114,11 +114,14 @@ int drv_getStopButton(void)
 	return elev_get_stop_signal();
 }
 
-int drv_getDirecction(void)
+int drv_getDirection(void)
 {
 	return motorDirection;
 }
 
+int drv_getCurrentFloor(void){
+	return elev_get_floor_sensor_signal();
+}
 
 
 //------------------------
@@ -126,5 +129,5 @@ int drv_getDirecction(void)
 //------------------------
 int drv_dirToTargetFloor(void)
 {
-	//prioritetskode!!!
+	return 1;
 }

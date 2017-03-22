@@ -1,5 +1,6 @@
 #include "timer.h"
 #include "systemReport.h"
+#include <stdbool.h>
 
 
 void tmr_startTimer(float duration)
@@ -11,7 +12,7 @@ void tmr_startTimer(float duration)
 }
 
 
-bool tmr_getTimerDone(void)
+int tmr_getTimerDone(void)
 {
 	float deltaTime = (float)(clock() - timerStarted) / CLOCKS_PER_SEC; //get time difference
 	if (deltaTime >= dur && timerEnabled)

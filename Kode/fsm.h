@@ -1,7 +1,6 @@
-#ifndef __INCLUDE_FSM_H__
-#define __INCLUDE_FSM_H__
+//#ifndef __INCLUDE_FSM_H__
+//#define __INCLUDE_FSM_H__
 
-#include <stdbool.h>
 typedef enum{
 	INIT,
 	EMERGENCY,
@@ -21,4 +20,4 @@ void fsm_stopButtonReleased(void);
 void fsm_requestButtonPressed(int buttonType, int floor);
 void fsm_timerDone(void);
 
-#endif
+//#endif
