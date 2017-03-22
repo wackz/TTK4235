@@ -6,7 +6,7 @@
 int main() {
     // Initialize hardware
     if (!elev_init()) {
-		printSystemMessage("boot", "could not initialize driver");
+		//printSystemMessage("boot", "could not initialize driver");
         return 1;
     }
 

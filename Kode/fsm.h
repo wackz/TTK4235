@@ -19,5 +19,5 @@ void fsm_init(void);
 void fsm_entersFloor(int floor);
 void fsm_stopButtonPressed(void);
 void fsm_stopButtonReleased(void);
-void fsm_requestButtonPressed(int floor, int buttonType);
+void fsm_requestButtonPressed(int buttonType, int floor);
 void fsm_timerDone(void);

@@ -1,5 +1,6 @@
 #include "heis.h"
-
+#define N_FLOORS 4
+#define N_BUTTONS 3
 
 void mainElevatorLoop(void){
 	//initialisering skjer her!
@@ -11,7 +12,7 @@ void mainElevatorLoop(void){
 	elev_set_motor_direction(DIRN_STOP);
 	*/
 	
-	fsm_init()
+	fsm_init();
 
 	
 	//hovedprogramloop
@@ -30,7 +31,7 @@ void mainElevatorLoop(void){
 //update functions for state of elevator
 //---------------------------------------------------
 
-static void updateStopButton(void){
+static void updateStopButton(){
 	static previousButtonState = false;
 	
 	if(!previousButtonState && drv_getStopButton()){
@@ -44,7 +45,7 @@ static void updateStopButton(void){
 	}
 }
 
-static void updateOrderButtons(void){
+static void updateOrderButtons(){
 	static int buttonStates[N_BUTTONS][N_FLOORS] = {{0}};
 	
 	for (int i = 0; i < N_BUTTONS; i++)
@@ -57,24 +58,34 @@ static void updateOrderButtons(void){
 			if (buttonStates[i][j]==0 && elev_get_button_signal(i,j))
             {
                 buttonStates[i][j]=true;
-                fsm_OrderBtnClicked(i,j);
+                fsm_requestButtonPressed(i,j);
             }
             else if (buttonStates[i][j]==1 && !elev_get_button_signal(i,j))
                 buttonStates[i][j]=false;
+        }
+    }
 			
 }
 
-static void updateTimer(void){
+/*static void updateTimer(){
 
-}
+}*/
 
-static void updateFloorSignals(void){
-	static bool previousFloorStates = {0,0,0,0};
+static void updateFloorSignals(){
+	static int previousFloorState[N_FLOORS] = {0};
+	
+	
+
+	for(int i = 0; i < N_FLOORS; i++){
+		if(!previousFloorState[i] && drv_getCurrentFloor()){
+			previousFloorState[i] = true;
+		}
+	}
 	
 	for(int i = 0; i < N_FLOORS; i++){
 		if(previousFloorState[i] && drv_getCurrentFloor()==i){
 			fsm_entersFloor();
-			previousButtonState[i] = false;
+			previousFloorState[i] = false;
 		}
 	}
 	
