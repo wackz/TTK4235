@@ -35,6 +35,7 @@ int drv_passingFloorWithRequest(int direction, int floor)
 	{
 		return floorMatrix[floor][BUTTON_CALL_DOWN];
 	}
+	return false;
 }
 
 /*
