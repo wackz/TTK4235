@@ -4,6 +4,13 @@
 //------------------------
 //target functions
 //------------------------
+static int targetFloor;
+static int currentFloor;
+static int IsAtFloor;
+static int motorDirection;
+static int floorMatrix[N_FLOORS][N_BUTTONS] = {{0}};
+
+
 
 void drv_setFloorMatrix(int floor, int buttonType, int value)
 {

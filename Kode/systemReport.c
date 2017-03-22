@@ -1,4 +1,5 @@
 #include "systemReport.h"
+#include <time.h>
 
 void printSystemMessage(char *moduleName, char *message, int value)
 {

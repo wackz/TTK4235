@@ -5,6 +5,8 @@
 
 #define TIMER_SEC 3
 
+static ElevatorState elevatorState;
+
 void fsm_init(void)
 {
 	printSystemMessage("fsm-init", "initializing", -1);

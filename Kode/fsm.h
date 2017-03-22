@@ -11,7 +11,7 @@ typedef enum{
 }ElevatorState;
 
 //holds current elevator state 
-ElevatorState elevatorState;
+
 
 //functions responding to any possible button press
 void fsm_init(void);
