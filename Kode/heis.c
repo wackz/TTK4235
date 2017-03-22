@@ -35,7 +35,7 @@ void mainElevatorLoop(void){
 //---------------------------------------------------
 
 static void updateStopButton(){
-	static previousButtonState = false;
+	static int previousButtonState = false;
 	
 	if(!previousButtonState && drv_getStopButton()){
 		//pressed stop button
