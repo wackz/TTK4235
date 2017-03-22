@@ -1,18 +1,17 @@
-#include "elev.h"
-#include "driver.h"
-#include "timer.h"
+#ifndef __INCLUDE_FSM_H__
+#define __INCLUDE_FSM_H__
+
 #include <stdbool.h>
-#include "systemReport.h"
 typedef enum{
 	INIT,
 	EMERGENCY,
 	IDLE,
 	MOVING,
 	OPEN_DOORS,
-}ElevatorState
+}ElevatorState;
 
 //holds current elevator state 
-ElevatorState elevatorState = INIT;
+ElevatorState elevatorState;
 
 //functions responding to any possible button press
 void fsm_init(void);
@@ -21,3 +20,5 @@ void fsm_stopButtonPressed(void);
 void fsm_stopButtonReleased(void);
 void fsm_requestButtonPressed(int buttonType, int floor);
 void fsm_timerDone(void);
+
+#endif

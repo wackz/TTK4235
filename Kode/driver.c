@@ -1,31 +1,32 @@
+#include "elev.h"
+#include "driver.h"
+#include <stdbool.h>
 //------------------------
 //target functions
 //------------------------
-void drv_setFloorMatrix(int floor, tag_elev_lamp_type buttonType)
+
+void drv_setFloorMatrix(int floor, int buttonType, int value)
 {
-	floorMatrix[floor][buttonType] = 1;
+	floorMatrix[floor][buttonType] = value;
 }
 
 void drv_wipeFloorMatrix(void)
 {
-	floorMatrix = {
-	{0,0,0},
-	{0,0,0},
-	{0,0,0},
-	{0,0,0}
-	}
+	for(int i = 0; i < N_FLOORS; i++)
+		for(int j = 0; j < N_BUTTONS; i++)
+			floorMatrix[i][j] = 0;
 }
 
 
-bool drv_passingFloorWithRequest(elev_motor_direction_t direction, int floor)
+int drv_passingFloorWithRequest(int direction, int floor)
 {
 	if(direction == DIRN_UP)
 	{
-		return (bool)floorMatrix[floor][BUTTON_CALL_UP];
+		return floorMatrix[floor][BUTTON_CALL_UP];
 	}
 	if(direction == DIRN_DOWN)
 	{
-		return (bool)floorMatrix[floor][BUTTON_CALL_DOWN];
+		return floorMatrix[floor][BUTTON_CALL_DOWN];
 	}
 }
 
@@ -36,7 +37,7 @@ int drv_getTargetFloor(void)
 }
 */
 
-bool drv_isAtTargetFloor(void)
+int drv_isAtTargetFloor(void)
 {
 	if(currentFloor == targetFloor){
 		return true;
@@ -51,20 +52,20 @@ bool drv_isAtTargetFloor(void)
 //------------------------
 //set functions
 //------------------------
-void drv_setMotorDirection(elev_motor_direction_t direction)
+void drv_setMotorDirection(int direction)
 {
 	elev_set_motor_direction(direction);
 	motorDirection = direction;
 }
 
-void drv_doorLamp(bool doorOpen)
+void drv_doorLamp(int value)
 {
-	void elev_set_door_open_lamp((int)doorOpen);
+	elev_set_door_open_lamp(value);
 }
 
-void drv_setStopLamp(bool lampOn)
+void drv_setStopLamp(int value)
 {
-	void elev_set_stop_lamp((bool)lampOn);
+	elev_set_stop_lamp(value);
 }
 
 void drv_setCurrentFloor()
@@ -75,13 +76,13 @@ void drv_setCurrentFloor()
 void drv_updateFloorLampsFromMatrix(void)
 {
 	for(int i = 0; i < 4; i++){
-		elev_set_button_lamp(BUTTON_COMMAND, i, int floorMatrix[i][BUTTON_COMMAND]);
+		elev_set_button_lamp(BUTTON_COMMAND, i, floorMatrix[i][BUTTON_COMMAND]);
 	}
 	for(int i = 1; i < 4; i++){
-		elev_set_button_lamp(BUTTON_CALL_DOWN, i, int floorMatrix[i][BUTTON_CALL_DOWN]);
+		elev_set_button_lamp(BUTTON_CALL_DOWN, i,floorMatrix[i][BUTTON_CALL_DOWN]);
 	}
 	for(int i = 0; i < 3; i++){
-		elev_set_button_lamp(BUTTON_CALL_UP, i, int floorMatrix[i][BUTTON_CALL_UP]);
+		elev_set_button_lamp(BUTTON_CALL_UP, i, floorMatrix[i][BUTTON_CALL_UP]);
 	}
 }
 
@@ -90,26 +91,22 @@ void drv_updateFloorLampsFromMatrix(void)
 //get functions
 //------------------------
 
-bool drv_GetIsAtFloor(void)
+int drv_GetIsAtFloor(void)
 {
-	int floor = elev_get_floor_sensor_signal(void);
+	int floor = elev_get_floor_sensor_signal();
 	if(floor != -1)
 	{
 		return true;
 	}
-	return false
+	return false;
 }
 
-bool drv_getStopButton(void)
+int drv_getStopButton(void)
 {
-	if((bool)elev_get_stop_signal(void))
-	{
-		return true;
-	}
-	return false
+	return elev_get_stop_signal();
 }
 
-elev_motor_direction_t drv_getDirecction(void)
+int drv_getDirecction(void)
 {
 	return motorDirection;
 }
@@ -119,7 +116,7 @@ elev_motor_direction_t drv_getDirecction(void)
 //------------------------
 //priority handling code
 //------------------------
-elev_motor_direction_t drv_dirToTargetFloor(void)
+int drv_dirToTargetFloor(void)
 {
 	//prioritetskode!!!
 }

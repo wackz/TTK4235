@@ -1,4 +1,9 @@
+#include "elev.h"
+#include "driver.h"
 #include "heis.h"
+#include "fsm.h"
+#include "timer.h"
+
 #define N_FLOORS 4
 #define N_BUTTONS 3
 
@@ -12,9 +17,7 @@ void mainElevatorLoop(void){
 	elev_set_motor_direction(DIRN_STOP);
 	*/
 	
-	fsm_init();
-
-	
+	fsm_init();	
 	//hovedprogramloop
 	while (true)
 	{
@@ -67,9 +70,9 @@ static void updateOrderButtons(){
 			
 }
 
-/*static void updateTimer(){
+static void updateTimer(){
 
-}*/
+}
 
 static void updateFloorSignals(){
 	static int previousFloorState[N_FLOORS] = {0};
@@ -84,7 +87,7 @@ static void updateFloorSignals(){
 	
 	for(int i = 0; i < N_FLOORS; i++){
 		if(previousFloorState[i] && drv_getCurrentFloor()==i){
-			fsm_entersFloor();
+			fsm_entersFloor(i);
 			previousFloorState[i] = false;
 		}
 	}
