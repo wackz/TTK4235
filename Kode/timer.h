@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-void tmr_startTimer(float duration); // starts the timer with a duration of (duration)
+void tmr_startTimer(long double duration); // starts the timer with a duration of (duration)
 int tmr_getTimerDone(void); //returns true if the timer is done and HAS NOT BEEN READ after the timer is done
 
 #endif

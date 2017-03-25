@@ -3,6 +3,7 @@
 #include "systemReport.h"
 #include "fsm.h"
 #include <stdbool.h>
+#include "timer.h"
 
 #define TIMER_SEC 3
 
@@ -58,10 +59,14 @@ void fsm_timerDone(void)
 			drv_setMotorDirection(drv_dirToTargetFloor());
 			printSystemMessage("fsm", "timer complete after doors have been open", -1);
 			break;
-		case IDLE: 
-			elevatorState = MOVING;
-			drv_setDoorLamp(false);
+		case IDLE:
+			if(!drv_isAtTargetFloor()){
+				elevatorState = MOVING;
+			} 
+
 			drv_setMotorDirection(drv_dirToTargetFloor());
+			
+			drv_setDoorLamp(false);
 			printSystemMessage("fsm", "timer complete after idle period", -1);
 			break;
 		default: break;
@@ -73,22 +78,27 @@ void fsm_timerDone(void)
 
 void fsm_entersFloor(int floor){
 	printSystemMessage("fsm", "entering floor", floor);
-	drv_setCurrentFloor();
+	drv_setPreviousFloor();
 	if(drv_isAtTargetFloor())
 	{
-		if(drv_dirToTargetFloor() == DIRN_STOP)
-		{
-			elevatorState = IDLE;
-			drv_setMotorDirection(DIRN_STOP);
-			drv_setDoorLamp(true);
-			printSystemMessage("fsm", "reached target floor - going to idle", floor);
-		}
+		elevatorState = IDLE;
+		drv_setMotorDirection(DIRN_STOP);
+		drv_setDoorLamp(true);
+		printSystemMessage("fsm", "reached target floor - going to idle", floor);
+		tmr_startTimer(TIMER_SEC);
+		drv_setFloorMatrix(floor,BUTTON_CALL_UP,0);
+		drv_setFloorMatrix(floor,BUTTON_CALL_DOWN,0);
+		drv_setFloorMatrix(floor,BUTTON_COMMAND,0);
+
+		drv_updateTargetFloor();
+
+
 	}
 	else if(drv_passingFloorWithRequest(drv_getDirection(),floor))
 	{
 		printSystemMessage("fsm", "stopping to pick up passenger", floor);
-		tmr_startTimer(TIMER_SEC);
-		drv_setMotorDirection(DIRN_STOP);
+		tmr_startTimer((long double)TIMER_SEC);
+		
 		elevatorState = OPEN_DOORS;
 		drv_setDoorLamp(true);
 		if(drv_getDirection() == DIRN_UP)
@@ -99,6 +109,8 @@ void fsm_entersFloor(int floor){
 		{
 			drv_setFloorMatrix(floor, BUTTON_CALL_DOWN, false);
 		}
+
+		drv_setMotorDirection(DIRN_STOP);
 	}
 	drv_updateFloorLampsFromMatrix();
 }
@@ -106,7 +118,7 @@ void fsm_entersFloor(int floor){
 
 
 
-void fsm_requestButtonPressed(int floor, int buttonType)
+void fsm_requestButtonPressed(int buttonType,int floor)
 {
 	if(elevatorState == EMERGENCY)
 	{
@@ -117,18 +129,33 @@ void fsm_requestButtonPressed(int floor, int buttonType)
 	drv_setFloorMatrix(floor, buttonType, true);
 	drv_updateFloorLampsFromMatrix();
 	
+	
+
 	switch(elevatorState){
 		case IDLE: 
+			printSystemMessage("fsm","idle",-1);
 			if(floor==drv_getCurrentFloor()){
 				printSystemMessage("fsm","Already at floor with request. Opening door",-1);
 				//HUSK Å SLETTE REQUEST HER. DET HAR IKKE JEG GJORT
+				
 			}
 			else {
-				elevatorState = MOVING;
+				drv_updateTargetFloor();
+				if(!drv_dirToTargetFloor()){
+					elevatorState = MOVING;
+				}
+				
 				drv_setDoorLamp(false);
 				drv_setMotorDirection(drv_dirToTargetFloor());
 			}
+			break;
+		case OPEN_DOORS:
+			printSystemMessage("fsm","open doors",-1);
+			drv_updateTargetFloor();
 			break; 
-		default: break;
+		default: 
+			printSystemMessage("fsm","default case",-1);
+			break;
 	}
+
 }

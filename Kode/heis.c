@@ -4,6 +4,8 @@
 #include "fsm.h"
 #include "timer.h"
 #include <stdbool.h>
+#include "systemReport.h"
+
 
 #define N_FLOORS 4
 #define N_BUTTONS 3
@@ -75,6 +77,23 @@ static void updateOrderButtons(){
 }
 
 static void updateTimer(){
+	static int previousTimerState = false;
+
+	if(!previousTimerState && tmr_getTimerDone()){
+		fsm_timerDone();
+		printSystemMessage("penis","called fsm timer done",-1);
+		previousTimerState = true;
+	}
+	if(previousTimerState && !tmr_getTimerDone()){
+		previousTimerState = false;
+	}
+
+
+	
+
+
+    
+
 
 }
 
