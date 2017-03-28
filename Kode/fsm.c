@@ -181,7 +181,6 @@ void fsm_requestButtonPressed(int buttonType,int floor)
 				drv_setDoorLamp(true);
 				tmr_startTimer(TIMER_SEC);
 				drv_setFloorMatrix(floor,buttonType,false);
-				
 			}
 			else {
 				drv_updateTargetFloor();
