@@ -8,5 +8,6 @@ static void updateFloorSignals(void);
 static void updateStopButton(void);
 static void updateOrderButtons(void);
 static void updateTimer(void);
+static void updateLamps(void);
 
 #endif

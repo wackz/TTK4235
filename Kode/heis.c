@@ -29,6 +29,7 @@ void mainElevatorLoop(void){
 		updateStopButton();
 		updateOrderButtons();
 		updateTimer();
+		updateLamps();
 	}
 }
 
@@ -47,6 +48,7 @@ static void updateStopButton(){
 	}
 	if(previousButtonState && !drv_getStopButton()){
 		//released stop button
+		fsm_stopButtonReleased();
 		previousButtonState = false;
 	}
 }
@@ -62,7 +64,7 @@ static void updateOrderButtons(){
 			//elev api calls needs to be moved to driver
 			//need to change fsm_OrderBtnClicked to fsm_requestButtonPressed
 			if(j==3 && i==0) continue;
-			if(j==0&& i==1) continue;
+			if(j==0 && i==1) continue;
 
 			if (buttonStates[i][j]==0 && elev_get_button_signal(i,j))
             {
@@ -119,6 +121,10 @@ static void updateFloorSignals(){
 	
 }
 
+static void updateLamps(){
+	drv_updateFloorLampsFromMatrix();
+	drv_updateFloorIndicator();
+}
 
 //---------------------------------------------------
 //update function for elevator output

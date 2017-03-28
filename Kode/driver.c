@@ -23,7 +23,7 @@ void drv_setFloorMatrix(int floor, int buttonType, int value)
 void drv_wipeFloorMatrix(void)
 {
 	for(int i = 0; i < N_FLOORS; i++)
-		for(int j = 0; j < N_BUTTONS; i++)
+		for(int j = 0; j < N_BUTTONS; j++)
 			floorMatrix[i][j] = 0;
 }
 
@@ -104,6 +104,10 @@ void drv_updateFloorLampsFromMatrix(void)
 	for(int i = 0; i < 3; i++){
 		elev_set_button_lamp(BUTTON_CALL_UP, i, floorMatrix[i][BUTTON_CALL_UP]);
 	}
+}
+
+void drv_updateFloorIndicator(void){
+	elev_set_floor_indicator(previousFloor);
 }
 
 void drv_printFloorMatrix(void)
