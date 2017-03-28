@@ -6,8 +6,8 @@
 //------------------------
 //target functions
 //------------------------
-static int targetFloor = 3;
-static int previousFloor = 3;
+static int targetFloor = 0;
+static int previousFloor = 0;
 static int IsAtFloor = true;
 static int motorDirection = DIRN_UP;
 static int previousMotorDirection = DIRN_UP;

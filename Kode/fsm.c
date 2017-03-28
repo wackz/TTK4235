@@ -177,7 +177,9 @@ void fsm_requestButtonPressed(int buttonType,int floor)
 			printSystemMessage("fsm","idle",-1);
 			if(floor==drv_getCurrentFloor()){
 				printSystemMessage("fsm","Already at floor with request. Opening door",-1);
-				elevatorState = IDLE;
+				elevatorState = OPEN_DOORS;
+				drv_setDoorLamp(true);
+				tmr_startTimer(TIMER_SEC);
 				drv_setFloorMatrix(floor,buttonType,false);
 				
 			}
@@ -192,7 +194,11 @@ void fsm_requestButtonPressed(int buttonType,int floor)
 		case OPEN_DOORS:
 			printSystemMessage("fsm","open doors",-1);
 			if(floor==drv_getCurrentFloor())
+			{
+				tmr_startTimer(TIMER_SEC);
+				drv_setDoorLamp(true);
 				drv_setFloorMatrix(floor,buttonType,false);
+			}
 			drv_updateTargetFloor();
 			break; 
 		case MOVING:
